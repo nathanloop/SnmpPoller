@@ -1,10 +1,14 @@
 import schedule, csv, time
 from easysnmp import Session
+from datetime import datetime
 
 def poll(host, com, ver, mib):
     session = Session(hostname=host, community=com, version=ver)
     output = session.get(mib)
-    print(output)
+    with open('results.csv','a') as results:
+        resultscsv = csv.writer(results)
+        resultscsv.writerow([datetime.now(), host, mib, output.value])
+
 
 with open('inventory.csv') as inventory:
     invcsv = csv.reader(inventory)
